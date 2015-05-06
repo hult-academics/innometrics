@@ -1,4 +1,3 @@
-
 window.timealign = function(){
 	var now = new Date();
 	now.setHours(23);
@@ -7,9 +6,11 @@ window.timealign = function(){
 	return parseInt(now/1000 + 1,10);
 }
 
+// get PID
+// get Profile from PID
 window.startProfile = function(iql){
 	window.iql = iql;
-	var pid = getPID() ? getPID() : "";
+	var pid = getPID() ? getPID() : "geoff.williams@hult.edu"; //return this to empty string
 	if(pid){
 		getProfile(pid);
 	}
@@ -21,17 +22,19 @@ window.startProfile = function(iql){
 	});
 }
 
-
+//get PID from url query string
 window.getPID = function(){
 	var m = RegExp('[?&]pid=([^&]*)','i').exec(window.location.search);
 	return m && decodeURIComponent(m[1].replace(/\+/g, ' '));
 }
-
+//
+//getProfile
+// should account for error
 window.getProfile = function(pid){
-		$.ajax({
-			url: "https://api.innomdc.com/v1/companies/149/buckets/hult/profiles/"+pid+"/?method=POST&type=jsonp&callback=receive&data={%22id%22:%22"+pid+"%22}", 
-			dataType: "jsonp"
-		});
+	$.ajax({
+		url: "https://api.innomdc.com/v1/companies/149/buckets/hult/profiles/"+pid+"/?method=POST&type=jsonp&callback=receive&data={%22id%22:%22"+pid+"%22}",
+		dataType: "jsonp"
+	});
 }
 
 window.receive = function (data){
@@ -50,14 +53,14 @@ generateVistedPages = function(channel,ev, days){
 
 	var events = iql.collectApp(channel).section("hult-edu").event(ev).inLast("events.day",days).getEvents();
 	for(var i = 0; i < events.length; i ++){
-			if(!counters[events[i].data.url]){
-				counters[events[i].data.url] = "1";
-				titles[events[i].data.url] = events[i].data.title;
-				ts[events[i].data.url] = new Date(events[i].createdAt);
-			} else {
-				counters[events[i].data.url] = (parseInt(counters[events[i].data.url], 10) + 1).toString();
-				ts[events[i].data.url] = new Date(events[i].createdAt);
-			}
+		if(!counters[events[i].data.url]){
+			counters[events[i].data.url] = "1";
+			titles[events[i].data.url] = events[i].data.title;
+			ts[events[i].data.url] = new Date(events[i].createdAt);
+		} else {
+			counters[events[i].data.url] = (parseInt(counters[events[i].data.url], 10) + 1).toString();
+			ts[events[i].data.url] = new Date(events[i].createdAt);
+		}
 	}
 	for(a in counters){
 		buffer.push([a,counters[a]]);
@@ -85,7 +88,7 @@ generateRecentActivity = function(channel,ev,days){
 			hc += '<tr><td class="tg-lf6h">'+channel+'</td><td class="tg-lf6h">'+new Date(events[events.length - i].createdAt)+'</td><td class="tg-lf6h">'+ev+'</td><td class="tg-lf6h">'+events[events.length - i].data.title+'</td><td class="tg-gjl5">'+events[events.length - i].data.url+'</td></tr>';
 		} else {
 			hc += '<tr style="display:none"><td class="tg-lf6h">'+channel+'</td><td class="tg-lf6h">'+new Date(events[events.length - i].createdAt)+'</td><td class="tg-lf6h">'+ev+'</td><td class="tg-lf6h">'+events[events.length - i].data.title+'</td><td class="tg-gjl5">'+events[events.length - i].data.url+'</td></tr>';
-		} 
+		}
 	}
 
 	$("#recent-engagement").append(hc);
@@ -100,7 +103,7 @@ populateLineChartDataSet = function(recent){
 	for(var d = recent; d >= 0; d --){
 		day = window.moment().subtract(d, 'days')._d; //moment.js api
 		temp[0] = new Date(day).getMonth() + 1;
-		temp[1] = new Date(day).getDate();	
+		temp[1] = new Date(day).getDate();
 		dataset[temp.join("/")] = 0;
 		temp = [];
 	}
@@ -128,66 +131,66 @@ generateDataChart = function(dataset){
 		d.push(v);
 	});
 	var chartdata = {
-    labels: x,
-    datasets: [
-        {
-            label: "Recent 28 days Visit Duration",
-            fillColor: "rgba(220,220,220,0.2)",
-            strokeColor: "rgba(220,220,220,1)",
-            pointColor: "rgba(220,220,220,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(220,220,220,1)",
-            data: d
-        }
-    ]
+		labels: x,
+		datasets: [
+			{
+				label: "Recent 28 days Visit Duration",
+				fillColor: "rgba(41,196,219,0.7)",
+				strokeColor: "rgba(41,196,219,1)",
+				pointColor: "rgba(41,196,219,1)",
+				pointStrokeColor: "#fff",
+				pointHighlightFill: "#fff",
+				pointHighlightStroke: "rgba(41,196,219,1)",
+				data: d
+			}
+		]
 	};
 	var options = {
 
-    ///Boolean - Whether grid lines are shown across the chart
-    scaleShowGridLines : true,
+		///Boolean - Whether grid lines are shown across the chart
+		scaleShowGridLines : true,
 
-    //String - Colour of the grid lines
-    scaleGridLineColor : "rgba(0,0,0,.05)",
+		//String - Colour of the grid lines
+		scaleGridLineColor : "rgba(0,0,0,.05)",
 
-    //Number - Width of the grid lines
-    scaleGridLineWidth : 1,
+		//Number - Width of the grid lines
+		scaleGridLineWidth : 1,
 
-    //Boolean - Whether to show horizontal lines (except X axis)
-    scaleShowHorizontalLines: true,
+		//Boolean - Whether to show horizontal lines (except X axis)
+		scaleShowHorizontalLines: true,
 
-    //Boolean - Whether to show vertical lines (except Y axis)
-    scaleShowVerticalLines: true,
+		//Boolean - Whether to show vertical lines (except Y axis)
+		scaleShowVerticalLines: true,
 
-    //Boolean - Whether the line is curved between points
-    bezierCurve : true,
+		//Boolean - Whether the line is curved between points
+		bezierCurve : true,
 
-    //Number - Tension of the bezier curve between points
-    bezierCurveTension : 0.4,
+		//Number - Tension of the bezier curve between points
+		bezierCurveTension : 0.4,
 
-    //Boolean - Whether to show a dot for each point
-    pointDot : true,
+		//Boolean - Whether to show a dot for each point
+		pointDot : true,
 
-    //Number - Radius of each point dot in pixels
-    pointDotRadius : 3,
+		//Number - Radius of each point dot in pixels
+		pointDotRadius : 3,
 
-    //Number - Pixel width of point dot stroke
-    pointDotStrokeWidth : 1,
+		//Number - Pixel width of point dot stroke
+		pointDotStrokeWidth : 1,
 
-    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-    pointHitDetectionRadius : 20,
+		//Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+		pointHitDetectionRadius : 20,
 
-    //Boolean - Whether to show a stroke for datasets
-    datasetStroke : true,
+		//Boolean - Whether to show a stroke for datasets
+		datasetStroke : true,
 
-    //Number - Pixel width of dataset stroke
-    datasetStrokeWidth : 2,
+		//Number - Pixel width of dataset stroke
+		datasetStrokeWidth : 2,
 
-    //Boolean - Whether to fill the dataset with a colour
-    datasetFill : true,
+		//Boolean - Whether to fill the dataset with a colour
+		datasetFill : true,
 
-    //String - A legend template
-    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+		//String - A legend template
+		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
 
 	};
 	var timeonvisit = new Chart(ctx).Line(chartdata, options);
