@@ -7,11 +7,12 @@
 </head>
 <body>
 
-  <h2 class="caTitle">Engagement</h2>
+  <h2 class="catTitle">Engagement</h2>
 
-  <h3 class="secTitle">Time on Hult.edu (last <span class="timeScope">28</span> days)</h3>
+  <div id="chart-wrapper" class="contentBlock whiteBlock">
 
-  <div id="chart-wrapper">
+    <h3 class="secTitle ta-c">Time on Hult.edu (last <span class="js-scope">28</span> days)</h3>
+
     <table id="widget-wrapper" align="center" style="width:100%">
       <tr>
         <td width="100%" colspan="2">
@@ -36,36 +37,9 @@
     </table>
   </div>
 
-  <div id="table-wrapper">
-
-    <div style="padding-left:325px;">Most visited web pages (last <span class="timeScope">28</span> days)</div>
-    <table id="most-visited" class="tg" style="undefined;table-layout: fixed; width: 1177px">
-      <colgroup>
-        <col style="width: 69px">
-        <col style="width: 143px">
-        <col style="width: 114px">
-        <col style="width: 339px">
-        <col style="width: 512px">
-      </colgroup>
-      <tr>
-        <th class="tg-pi53">Channel</th>
-        <th class="tg-pi53">Date</th>
-        <th class="tg-pi53">Visit Count</th>
-        <th class="tg-pi53">Content</th>
-        <th class="tg-3sk9">Detail</th>
-      </tr>
-      <!-- table data here -->
-    </table>
-
-    <div style="padding-left:325px;">Recent engagement activity</div>
-    <table id="recent-engagement" class="tg" style="undefined;table-layout: fixed; width: 1177px">
-      <colgroup>
-        <col style="width: 69px">
-        <col style="width: 143px">
-        <col style="width: 114px">
-        <col style="width: 339px">
-        <col style="width: 512px">
-      </colgroup>
+  <div class="contentBlock">
+    <table id="recent-engagement" class="tg customTable" cellpadding="0" cellspacing="0">
+      <thead>
       <tr>
         <th class="tg-pi53">Channel</th>
         <th class="tg-pi53">Date</th>
@@ -73,8 +47,31 @@
         <th class="tg-pi53">Content</th>
         <th class="tg-3sk9">Detail</th>
       </tr>
-      <!-- table data here -->
+      </thead>
+      <tbody>
+        <!-- table data here -->
+      </tbody>
+
     </table>
+  </div>
+
+  <div class="contentBlock">
+    <h3 class="catTitle">Most visited web pages (last <span class="js-scope">28</span> days)</h3>
+    <table id="most-visited" class="tg customTable">
+      <thead>
+        <tr>
+          <th class="tg-pi53">Channel</th>
+          <th class="tg-pi53">Date</th>
+          <th class="tg-pi53">Visit Count</th>
+          <th class="tg-pi53">Content</th>
+          <th class="tg-3sk9">Detail</th>
+        </tr>
+      </thead>
+      <tbody>
+      <!-- table data here -->
+      </tbody>
+    </table>
+    <div style="padding-left:325px;">Recent engagement activity</div>
 
   </div>
 

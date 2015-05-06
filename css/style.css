@@ -1,64 +1,37 @@
-.tg {
-    border-collapse: collapse;
-    border-spacing: 0;
-    border-color: #ccc;
-    margin: 0px auto;
+body{
+    background-color: #f8f8f8;
 }
 
-.tg td {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    padding: 10px 5px;
-    border-style: solid;
-    border-width: 1px;
-    overflow: hidden;
-    word-break: normal;
-    border-color: #ccc;
-    color: #333;
+.ta-c{
+    text-align: center;
+}
+
+.contentBlock{
+    margin-bottom: 70px;
+}
+
+.whiteBlock{
     background-color: #fff;
 }
 
-.tg th {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    font-weight: normal;
-    padding: 10px 5px;
-    border-style: solid;
-    border-width: 1px;
-    overflow: hidden;
-    word-break: normal;
-    border-color: #ccc;
-    color: #333;
-    background-color: #f0f0f0;
+.catTitle{
+
 }
 
-.tg .tg-lf6h {
-    background-color: #f9f9f9;
-    font-size: 12px;
-    text-align: center
+.secTitle{
+
 }
 
-.tg .tg-kr94 {
-    font-size: 12px;
-    text-align: center
+.customTable{
+    table-layout: fixed;
+    width: 1177px;
 }
 
-.tg .tg-k6pi {
-    font-size: 12px
+.customTable > thead > tr > th{
+    background-color: #f2f3f3;
+    margin: 20px 0 60px 0;
 }
-
-.tg .tg-pi53 {
-    font-weight: bold;
-    font-size: 12px;
-    text-align: center
-}
-
-.tg .tg-3sk9 {
-    font-weight: bold;
-    font-size: 12px
-}
-
-.tg .tg-gjl5 {
-    background-color: #f9f9f9;
-    font-size: 12px
+.customTable > tbody > tr > td{
+    background-color: #fff;
+    border-bottom: 1px solid #f0f0f0;
 }
