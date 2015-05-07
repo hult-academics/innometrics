@@ -1,7 +1,28 @@
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
 body{
     background-color: #f8f8f8;
     font-family: "H", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
     font-size:12px;
+}
+
+
+#timeonvisit{
+    width: 100% !important;
+    height: 300px;
+}
+
+.chartFrame{
+    max-width: 1370px;
+}
+
+.data-controls{
+    text-align: center;
 }
 
 .ta-c{
@@ -25,6 +46,10 @@ body{
     font-size: 14px;
 }
 
+.whiteBlock .secTitle{
+    margin: 0 0 15px 0;
+}
+
 .customTable{
     table-layout: fixed;
     /*width: 1177px;*/
@@ -41,5 +66,40 @@ body{
 .customTable > tbody > tr > td{
     background-color: #fff;
     border-bottom: 1px solid #f0f0f0;
-    padding:2px 6px;
+    padding:6px 6px;
+}
+
+.js-more{
+    text-decoration: none;
+    display: inline-block;
+    padding: 6px 8px;
+    background-color: #fff;
+    border-radius: 0 0 4px 4px;
+    color: #000;
+}
+
+.js-more:hover{
+    background-color: #28c3db;
+    color: #fff;
+}
+
+.hidden{
+    display:none;
+}
+
+.btn{
+    padding: 8px 12px;
+    color:#000;
+    background-color: #fff;
+    border: 1px solid #efefef;
+    border-radius: 4px;
+}
+
+.btn:hover{
+    cursor:pointer;
+    color:#fff;
+    background-color: #28c3db;
+    color: #fff;
+    border-color: #28c3db;
+
 }

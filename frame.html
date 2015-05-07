@@ -10,23 +10,26 @@
   <h2 class="catTitle">Engagement</h2>
 
   <section id="chart-wrapper" class="contentBlock whiteBlock">
-    <h3 class="secTitle ta-c">Time on Hult.edu (last <span class="js-scope">28</span> days)</h3>
-    <canvas id="timeonvisit" width="600" height="300" style="width:100%"></canvas>
+    <h3 class="secTitle ta-c">Time on Hult.edu (last <span class="js-scope">30</span> days)</h3>
+    <div class="chartFrame">
+      <canvas id="timeonvisit" width="1370" height="300"></canvas>
+    </div>
   </section>
 
 
   <section id="table-wrapper">
+    <div class="data-controls">
+      <button id="refresh" class="btn">
+        Refresh profile
+      </button>
 
-    <button id="refresh">
-    Refresh profile
-    </button>
-
-    <button id="showall">
-      Show all data
-    </button>
+      <button id="showall" class="btn">
+        Show all data
+      </button>
+    </div>
 
     <div class="contentBlock">
-      <h3 class="secTitle">Most visited web pages (last <span class="js-scope">28</span> days)</h3>
+      <h3 class="secTitle">Most visited web pages (last <span class="js-scope">30</span> days)</h3>
       <table id="most-visited" class="tg customTable" cellpadding="0" cellspacing="0">
         <thead>
         <tr>
@@ -42,6 +45,8 @@
         </tbody>
       </table>
     </div>
+
+
 
     <div class="contentBlock">
       <h3 class="secTitle">Recent engagement activity</h3>

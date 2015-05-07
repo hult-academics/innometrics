@@ -1,4 +1,13 @@
-var recordsShown = 5;
+var recordsShown = 5,
+ scopeInterval = 29, //time interval in days to be displayed (starts at 0, so currently its 30 days)
+ timeUnitSwitch = 2 * 60, // threshold of maximum session time (ms) at which point the chart is rendered in minutes
+ paginationUnit = 20;
+
+
+//var testPID = "";
+//var testPID = "alexavs87@hotmail.com";
+//var testPID = "geoff.williams@hult.edu";
+var testPID = "lashabhi503@gmail.com";
 
 window.timealign = function(){
 	var now = new Date();
@@ -12,7 +21,7 @@ window.timealign = function(){
 // get Profile from PID
 window.startProfile = function(iql){
 	window.iql = iql;
-	var pid = getPID() ? getPID() : "geoff.williams@hult.edu"; //return this to empty string
+	var pid = getPID() ? getPID() : testPID; //return this to empty string
 	if(pid){
 		getProfile(pid);
 	}
@@ -20,7 +29,8 @@ window.startProfile = function(iql){
 		window.location.reload();
 	});
 	$('#showall').click(function(){
-		$("tr:hidden").show();
+		$("tr.hidden").show().toggleClass('hidden');
+		$('.js-more').text('Collapse records').attr('data-action', 'collapse');
 	});
 }
 
@@ -41,12 +51,13 @@ window.getProfile = function(pid){
 
 window.receive = function (data){
 	iql.loadData(data.profile);
-	var dataset = populateLineChartDataSet(28);
-	generateVistedPages("web","page-view",28);
-	generateRecentActivity("web","page-view",28);
+	console.log(data.profile);
+	var dataset = populateLineChartDataSet(scopeInterval);
+	console.log(dataset);
+	generateVistedPages("web","page-view",scopeInterval);
+	generateRecentActivity("web","page-view",scopeInterval);
 	generateDataChart(dataset);
 }
-
 
 generateVistedPages = function(channel,ev, days){
 	var end = timealign() * 1000;
@@ -71,18 +82,27 @@ generateVistedPages = function(channel,ev, days){
 	for(element in buffer){
 		hidden = ''
 		if(element > recordsShown - 1){
-			hidden = 'style="display:none;"';
+			hidden = 'hidden';
 		}
 
-		hc += '<tr '+ hidden +'>' +
+		hc += '<tr class='+ hidden +'>' +
 			    '<td class="tg-lf6h">'+buffer[element][1]+'</td>' +
 				'<td class="tg-lf6h">'+moment(ts[buffer[element][0]]).format("MM/DD/YYYY")+'</td>' +
 				'<td class="tg-lf6h">'+titles[buffer[element][0]]+'</td>' +
 				//'<td class="tg-lf6h">'+channel+'</td>' +
-				'<td class="tg-gjl5">'+buffer[element][0]+'</td>' +
+				'<td class="tg-gjl5"><a href="http:'+ buffer[element][0] +'">'+buffer[element][0]+'</a></td>' +
 		      '</tr>';
 	}
-	$("#most-visited").append(hc);
+
+	var $mostVisited = $("#most-visited");
+
+	$mostVisited.append(hc);
+
+	if($('.hidden ',$mostVisited).length > 0){
+		console.log('show more');
+		$mostVisited.after( '<a href="#" class="js-more" data-action="expand">View <span>'+ paginationUnit +'</span> next records</a>');
+	}
+
 	return true;
 }
 
@@ -96,25 +116,37 @@ generateRecentActivity = function(channel,ev,days){
 		hidden = ''
 
 		if(i > recordsShown){
-			hidden = 'style="display:none;"';
+			hidden = 'hidden';
 		}
 
-		hc += '<tr '+ hidden +'>' +
+		hc += '<tr class='+ hidden +'>' +
 				'<td class="tg-lf6h">'+channel+'</td>' +
 				'<td class="tg-lf6h">'+ev+'</td>' +
 			    '<td class="tg-lf6h">'+moment(events[events.length - i].createdAt).format("MM/DD/YYYY")+'</td>' +
 				'<td class="tg-lf6h">'+events[events.length - i].data.title+'</td>' +
-				'<td class="tg-gjl5">'+events[events.length - i].data.url+'</td>' +
+				'<td class="tg-gjl5"><a href="http:'+events[events.length - i].data.url+'">'+events[events.length - i].data.url+'</a></td>' +
 			  '</tr>';
 	}
 
-	$("#recent-engagement").append(hc);
+	var $recentEngagement = $("#recent-engagement");
+
+	$recentEngagement.append(hc);
+
+	if($('.hidden ', $recentEngagement.length > 0)){
+		if($recentEngagement.length > paginationUnit){
+			//has more than 20
+		}else{
+			//has less than 20
+		}
+		$recentEngagement.after( '<a href="#" class="js-more" data-action="expand">View <span>'+ paginationUnit +'</span> next records</a>');
+	}
+
 	return true;
 }
 
 populateLineChartDataSet = function(recent){
 	var end = timealign() * 1000;
-	var start = end - 2419200000; //ms
+	var start = end - (scopeInterval *24*60*60*1000); //ms
 	var day = new Date(), temp = [], dataset = {};
 
 	for(var d = recent; d >= 0; d --){
@@ -131,7 +163,7 @@ populateLineChartDataSet = function(recent){
 			temp[0] = new Date(s[i].createdAt).getMonth() + 1;
 			temp[1] = new Date(s[i].createdAt).getDate();
 
-			dataset[temp.join("/")] += (((s[i].data["visit-duration"] && s[i].data["visit-duration"] > 0) ? s[i].data["visit-duration"] : 30)/60); //30 sec for empty sessions which could be a bounce or email activity
+			dataset[temp.join("/")] += (((s[i].data["visit-duration"] && s[i].data["visit-duration"] > 0) ? s[i].data["visit-duration"] : 0)); //0 sec for empty sessions which could be a bounce or email activity
 			//dataset[temp.join("/")] += (s[i].modifiedAt - s[i].createdAt)/60000;
 			temp = [];
 		}
@@ -140,35 +172,58 @@ populateLineChartDataSet = function(recent){
 }
 
 
+//assess if the chart will render in seconds or minutes
+// if minute, convert values
+var setChartTimeUnit = function(sessionTimes){
+	//sessionTime
+	var peakTime = 0;
+
+	sessionTimes.forEach(function(sessionTime){
+
+		(peakTime < sessionTime) ? (peakTime = sessionTime):peakTime;
+
+	})
+
+	if(peakTime > timeUnitSwitch){
+		//display chart in minutes
+		for (i = 0; i < sessionTimes.length; i++) {
+			sessionTimes[i] = (Math.round(sessionTimes[i]/60*100)/100); //maybe calculate seconds instead of rounding
+		}
+	}
+
+	return sessionTimes
+}
+
 generateDataChart = function(dataset){
 	var x = [], d = [];
 	var ctx = document.getElementById("timeonvisit").getContext("2d");
 	$.each(dataset, function(k,v){
 		x.push(k);
-
-		var y = moment.duration(v, 'milliseconds')
-		d.push(y.seconds());
+		d.push(v);
 	});
 
-	console.log(d);
+	d = setChartTimeUnit(d);
+
+	//console.log(d);
 
 	var chartdata = {
 		labels: x,
 		datasets: [
 			{
-				label: "Recent 28 days Visit Duration",
+				label: "Recent " + scopeInterval + " days Visit Duration",
 				fillColor: "rgba(41,196,219,0.2)",
 				strokeColor: "rgba(41,196,219,1)",
-				pointColor: "rgba(41,196,219,1)",
-				pointStrokeColor: "#fff",
+				pointColor: "#fff",
+				pointStrokeColor: "rgba(41,196,219,1)",
 				pointHighlightFill: "#fff",
 				pointHighlightStroke: "rgba(41,196,219,1)",
-				backgroundColor: "#F8F8F8",
 				data: d
 			}
 		]
 	};
 	var options = {
+
+		tooltipFillColor: "rgba(0,0,0,0.4)",
 
 		///Boolean - Whether grid lines are shown across the chart
 		scaleShowGridLines : true,
@@ -185,20 +240,22 @@ generateDataChart = function(dataset){
 		//Boolean - Whether to show vertical lines (except Y axis)
 		scaleShowVerticalLines: true,
 
+		scaleFontColor: "#000",
+
 		//Boolean - Whether the line is curved between points
 		bezierCurve : false,
 
 		//Number - Tension of the bezier curve between points
-		bezierCurveTension : 0.4,
+		//bezierCurveTension : 0.4,
 
 		//Boolean - Whether to show a dot for each point
 		pointDot : true,
 
 		//Number - Radius of each point dot in pixels
-		pointDotRadius : 3,
+		pointDotRadius : 6,
 
 		//Number - Pixel width of point dot stroke
-		pointDotStrokeWidth : 1,
+		pointDotStrokeWidth : 3,
 
 		//Number - amount extra to add to the radius to cater for hit detection outside the drawn point
 		pointHitDetectionRadius : 20,
@@ -207,10 +264,12 @@ generateDataChart = function(dataset){
 		datasetStroke : true,
 
 		//Number - Pixel width of dataset stroke
-		datasetStrokeWidth : 2,
+		datasetStrokeWidth : 3,
 
 		//Boolean - Whether to fill the dataset with a colour
 		datasetFill : true,
+
+		responsive : true,
 
 		//String - A legend template
 		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
@@ -219,3 +278,32 @@ generateDataChart = function(dataset){
 	var timeonvisit = new Chart(ctx).Line(chartdata, options);
 	return true;
 }
+
+$(document).on('click', '.js-more', function(e){
+	e.preventDefault();
+	e.stopPropagation();
+
+	var myAction=$(e.target).attr('data-action');
+	var $thisTable = $(e.target).prev('table');
+
+	if(myAction == "expand"){
+		var $toHide = $thisTable.find('.hidden').slice(0, (paginationUnit - 1));
+
+		$toHide.each(function(){
+			$(this).show().toggleClass('hidden');
+		});
+
+		if($thisTable.find('.hidden').length <= 0){
+			$(e.target).text('Collapse records').attr('data-action', 'collapse');
+		}
+	}else{
+		//action == contract
+		var $myRows = $thisTable.find('tbody > tr')
+		$myRows.slice(recordsShown, $myRows.length).each(function(){
+			$(this).hide().toggleClass('hidden');
+			$(e.target).text('View '+ paginationUnit +' next records').attr('data-action', 'expand');
+		})
+	}
+
+
+})
