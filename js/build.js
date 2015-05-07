@@ -73,9 +73,10 @@ generateVistedPages = function(channel,ev, days){
 		if(element > recordsShown - 1){
 			hidden = 'style="display:none;"';
 		}
+
 		hc += '<tr '+ hidden +'>' +
 			    '<td class="tg-lf6h">'+buffer[element][1]+'</td>' +
-				'<td class="tg-lf6h">'+ts[buffer[element][0]]+'</td>' +
+				'<td class="tg-lf6h">'+moment(ts[buffer[element][0]]).format("MM/DD/YYYY")+'</td>' +
 				'<td class="tg-lf6h">'+titles[buffer[element][0]]+'</td>' +
 				//'<td class="tg-lf6h">'+channel+'</td>' +
 				'<td class="tg-gjl5">'+buffer[element][0]+'</td>' +
@@ -100,8 +101,8 @@ generateRecentActivity = function(channel,ev,days){
 
 		hc += '<tr '+ hidden +'>' +
 				'<td class="tg-lf6h">'+channel+'</td>' +
-				'<td class="tg-lf6h">'+new Date(events[events.length - i].createdAt)+'</td>' +
 				'<td class="tg-lf6h">'+ev+'</td>' +
+			    '<td class="tg-lf6h">'+moment(events[events.length - i].createdAt).format("MM/DD/YYYY")+'</td>' +
 				'<td class="tg-lf6h">'+events[events.length - i].data.title+'</td>' +
 				'<td class="tg-gjl5">'+events[events.length - i].data.url+'</td>' +
 			  '</tr>';
@@ -113,7 +114,7 @@ generateRecentActivity = function(channel,ev,days){
 
 populateLineChartDataSet = function(recent){
 	var end = timealign() * 1000;
-	var start = end - 2419200000;
+	var start = end - 2419200000; //ms
 	var day = new Date(), temp = [], dataset = {};
 
 	for(var d = recent; d >= 0; d --){
@@ -144,19 +145,25 @@ generateDataChart = function(dataset){
 	var ctx = document.getElementById("timeonvisit").getContext("2d");
 	$.each(dataset, function(k,v){
 		x.push(k);
-		d.push(v);
+
+		var y = moment.duration(v, 'milliseconds')
+		d.push(y.seconds());
 	});
+
+	console.log(d);
+
 	var chartdata = {
 		labels: x,
 		datasets: [
 			{
 				label: "Recent 28 days Visit Duration",
-				fillColor: "rgba(41,196,219,0.7)",
+				fillColor: "rgba(41,196,219,0.2)",
 				strokeColor: "rgba(41,196,219,1)",
 				pointColor: "rgba(41,196,219,1)",
 				pointStrokeColor: "#fff",
 				pointHighlightFill: "#fff",
 				pointHighlightStroke: "rgba(41,196,219,1)",
+				backgroundColor: "#F8F8F8",
 				data: d
 			}
 		]
@@ -179,7 +186,7 @@ generateDataChart = function(dataset){
 		scaleShowVerticalLines: true,
 
 		//Boolean - Whether the line is curved between points
-		bezierCurve : true,
+		bezierCurve : false,
 
 		//Number - Tension of the bezier curve between points
 		bezierCurveTension : 0.4,
