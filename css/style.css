@@ -1,5 +1,7 @@
 body{
     background-color: #f8f8f8;
+    font-family: "H", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+    font-size:12px;
 }
 
 .ta-c{
@@ -7,31 +9,38 @@ body{
 }
 
 .contentBlock{
-    margin-bottom: 70px;
+    margin-bottom: 30px;
 }
 
 .whiteBlock{
     background-color: #fff;
+    padding: 10px 20px;
 }
 
 .catTitle{
-
+    font-size: 18px;
 }
 
 .secTitle{
-
+    font-size: 14px;
 }
 
 .customTable{
     table-layout: fixed;
-    width: 1177px;
+    /*width: 1177px;*/
+    width: 100%;
+    text-align:left;
+    line-break: loose;
 }
 
 .customTable > thead > tr > th{
-    background-color: #f2f3f3;
     margin: 20px 0 60px 0;
+    padding:10px 6px 2px 6px;
+
+    background-color: #f2f3f3;
 }
 .customTable > tbody > tr > td{
     background-color: #fff;
     border-bottom: 1px solid #f0f0f0;
+    font-size: 10px;
 }

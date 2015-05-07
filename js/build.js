@@ -1,3 +1,5 @@
+var recordsShown = 5;
+
 window.timealign = function(){
 	var now = new Date();
 	now.setHours(23);
@@ -67,11 +69,17 @@ generateVistedPages = function(channel,ev, days){
 	}
 	buffer.sort(function(a,b){return b[1] - a[1]});
 	for(element in buffer){
-		if(element < 5){
-			hc += '<tr><td class="tg-lf6h">'+channel+'</td><td class="tg-lf6h">'+ts[buffer[element][0]]+'</td><td class="tg-lf6h">'+buffer[element][1]+'</td><td class="tg-lf6h">'+titles[buffer[element][0]]+'</td><td class="tg-gjl5">'+buffer[element][0]+'</td></tr>';
-		} else {
-			hc += '<tr style="display:none;"><td class="tg-lf6h">'+channel+'</td><td class="tg-lf6h">'+ts[buffer[element][0]]+'</td><td class="tg-lf6h">'+buffer[element][1]+'</td><td class="tg-lf6h">'+titles[buffer[element][0]]+'</td><td class="tg-gjl5">'+buffer[element][0]+'</td></tr>';
+		hidden = ''
+		if(element > recordsShown - 1){
+			hidden = 'style="display:none;"';
 		}
+		hc += '<tr '+ hidden +'>' +
+			    '<td class="tg-lf6h">'+buffer[element][1]+'</td>' +
+				'<td class="tg-lf6h">'+ts[buffer[element][0]]+'</td>' +
+				'<td class="tg-lf6h">'+titles[buffer[element][0]]+'</td>' +
+				//'<td class="tg-lf6h">'+channel+'</td>' +
+				'<td class="tg-gjl5">'+buffer[element][0]+'</td>' +
+		      '</tr>';
 	}
 	$("#most-visited").append(hc);
 	return true;
@@ -84,11 +92,19 @@ generateRecentActivity = function(channel,ev,days){
 	var events = iql.collectApp(channel).section("hult-edu").event(ev).inLast("events.day",days).getEvents();
 
 	for (var i = 1; i < events.length + 1; i ++ ){
-		if(i < 6){
-			hc += '<tr><td class="tg-lf6h">'+channel+'</td><td class="tg-lf6h">'+new Date(events[events.length - i].createdAt)+'</td><td class="tg-lf6h">'+ev+'</td><td class="tg-lf6h">'+events[events.length - i].data.title+'</td><td class="tg-gjl5">'+events[events.length - i].data.url+'</td></tr>';
-		} else {
-			hc += '<tr style="display:none"><td class="tg-lf6h">'+channel+'</td><td class="tg-lf6h">'+new Date(events[events.length - i].createdAt)+'</td><td class="tg-lf6h">'+ev+'</td><td class="tg-lf6h">'+events[events.length - i].data.title+'</td><td class="tg-gjl5">'+events[events.length - i].data.url+'</td></tr>';
+		hidden = ''
+
+		if(i > recordsShown){
+			hidden = 'style="display:none;"';
 		}
+
+		hc += '<tr '+ hidden +'>' +
+				'<td class="tg-lf6h">'+channel+'</td>' +
+				'<td class="tg-lf6h">'+new Date(events[events.length - i].createdAt)+'</td>' +
+				'<td class="tg-lf6h">'+ev+'</td>' +
+				'<td class="tg-lf6h">'+events[events.length - i].data.title+'</td>' +
+				'<td class="tg-gjl5">'+events[events.length - i].data.url+'</td>' +
+			  '</tr>';
 	}
 
 	$("#recent-engagement").append(hc);
