@@ -51,9 +51,7 @@ window.getProfile = function(pid){
 
 window.receive = function (data){
 	iql.loadData(data.profile);
-	console.log(data.profile);
 	var dataset = populateLineChartDataSet(scopeInterval);
-	console.log(dataset);
 	generateVistedPages("web","page-view",scopeInterval);
 	generateRecentActivity("web","page-view",scopeInterval);
 	generateDataChart(dataset);
@@ -99,7 +97,6 @@ generateVistedPages = function(channel,ev, days){
 	$mostVisited.append(hc);
 
 	if($('.hidden ',$mostVisited).length > 0){
-		console.log('show more');
 		$mostVisited.after( '<a href="#" class="js-more" data-action="expand">View <span>'+ paginationUnit +'</span> more records</a>');
 	}
 
@@ -203,8 +200,6 @@ generateDataChart = function(dataset){
 	});
 
 	d = setChartTimeUnit(d);
-
-	//console.log(d);
 
 	var chartdata = {
 		labels: x,
