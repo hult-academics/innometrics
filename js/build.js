@@ -1,13 +1,17 @@
 var recordsShown = 5,
  scopeInterval = 29, //time interval in days to be displayed (starts at 0, so currently its 30 days)
  timeUnitSwitch = 2 * 60, // threshold of maximum session time (ms) at which point the chart is rendered in minutes
- paginationUnit = 20;
+ paginationUnit = 5,
+ timeUnitLegend = {
+	seconds: 'secs',
+	 minutes: 'mins'
+}
 
 
-var testPID = "";
+//var testPID = "";
 //var testPID = "alexavs87@hotmail.com";
 //var testPID = "geoff.williams@hult.edu";
-//var testPID = "lashabhi503@gmail.com";
+var testPID = "lashabhi503@gmail.com";
 
 window.timealign = function(){
 	var now = new Date();
@@ -88,7 +92,9 @@ generateVistedPages = function(channel,ev, days){
 				'<td class="tg-lf6h">'+moment(ts[buffer[element][0]]).format("MM/DD/YYYY")+'</td>' +
 				'<td class="tg-lf6h">'+titles[buffer[element][0]]+'</td>' +
 				//'<td class="tg-lf6h">'+channel+'</td>' +
-				'<td class="tg-gjl5"><a href="http:'+ buffer[element][0] +'">'+buffer[element][0]+'</a></td>' +
+				'<td class="tg-gjl5">' +
+					'<a href="http:'+ buffer[element][0] +'">'+ cleanURL(buffer[element][0]) +'</a>' +
+				'</td>' +
 		      '</tr>';
 	}
 
@@ -101,6 +107,14 @@ generateVistedPages = function(channel,ev, days){
 	}
 
 	return true;
+}
+
+
+var cleanURL = function(myURL){
+
+	myURL = myURL.substr(2, myURL.length);
+
+	return myURL
 }
 
 generateRecentActivity = function(channel,ev,days){
@@ -116,12 +130,17 @@ generateRecentActivity = function(channel,ev,days){
 			hidden = 'hidden';
 		}
 
+		var myURL = events[events.length - i].data.url;
+		var myCleanURL = (events[events.length - i].data.url).substr(2, myURL.toString().length);
+
 		hc += '<tr class='+ hidden +'>' +
 				'<td class="tg-lf6h">'+channel+'</td>' +
 				'<td class="tg-lf6h">'+ev+'</td>' +
 			    '<td class="tg-lf6h">'+moment(events[events.length - i].createdAt).format("MM/DD/YYYY")+'</td>' +
 				'<td class="tg-lf6h">'+events[events.length - i].data.title+'</td>' +
-				'<td class="tg-gjl5"><a href="http:'+events[events.length - i].data.url+'">'+events[events.length - i].data.url+'</a></td>' +
+				'<td class="tg-gjl5">' +
+					'<a href="http:'+ events[events.length - i].data.url +'">'+ cleanURL(events[events.length - i].data.url) +'</a>' +
+				'</td>' +
 			  '</tr>';
 	}
 
@@ -131,15 +150,16 @@ generateRecentActivity = function(channel,ev,days){
 
 	if($('.hidden ', $recentEngagement.length > 0)){
 		if($recentEngagement.length > paginationUnit){
-			//has more than 20
+			//has more than X
 		}else{
-			//has less than 20
+			//has less than X
 		}
 		$recentEngagement.after( '<a href="#" class="js-more" data-action="expand">View <span>'+ paginationUnit +'</span> more records</a>');
 	}
 
 	return true;
 }
+
 
 populateLineChartDataSet = function(recent){
 	var end = timealign() * 1000;
@@ -169,6 +189,8 @@ populateLineChartDataSet = function(recent){
 }
 
 
+
+
 //assess if the chart will render in seconds or minutes
 // if minute, convert values
 var setChartTimeUnit = function(sessionTimes){
@@ -186,6 +208,11 @@ var setChartTimeUnit = function(sessionTimes){
 		for (i = 0; i < sessionTimes.length; i++) {
 			sessionTimes[i] = (Math.round(sessionTimes[i]/60*100)/100); //maybe calculate seconds instead of rounding
 		}
+
+		$('.chartFrame').prepend('<span class="timeUnit">'+ timeUnitLegend.minutes +'</span>');
+	}else{
+		//display chart in seconds
+		$('.chartFrame').prepend('<span class="timeUnit">'+ timeUnitLegend.seconds +'</span>');
 	}
 
 	return sessionTimes
