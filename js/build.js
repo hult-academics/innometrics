@@ -4,10 +4,10 @@ var recordsShown = 5,
  paginationUnit = 20;
 
 
-//var testPID = "";
+var testPID = "";
 //var testPID = "alexavs87@hotmail.com";
 //var testPID = "geoff.williams@hult.edu";
-var testPID = "lashabhi503@gmail.com";
+//var testPID = "lashabhi503@gmail.com";
 
 window.timealign = function(){
 	var now = new Date();
@@ -100,7 +100,7 @@ generateVistedPages = function(channel,ev, days){
 
 	if($('.hidden ',$mostVisited).length > 0){
 		console.log('show more');
-		$mostVisited.after( '<a href="#" class="js-more" data-action="expand">View <span>'+ paginationUnit +'</span> next records</a>');
+		$mostVisited.after( '<a href="#" class="js-more" data-action="expand">View <span>'+ paginationUnit +'</span> more records</a>');
 	}
 
 	return true;
@@ -138,7 +138,7 @@ generateRecentActivity = function(channel,ev,days){
 		}else{
 			//has less than 20
 		}
-		$recentEngagement.after( '<a href="#" class="js-more" data-action="expand">View <span>'+ paginationUnit +'</span> next records</a>');
+		$recentEngagement.after( '<a href="#" class="js-more" data-action="expand">View <span>'+ paginationUnit +'</span> more records</a>');
 	}
 
 	return true;
@@ -301,7 +301,7 @@ $(document).on('click', '.js-more', function(e){
 		var $myRows = $thisTable.find('tbody > tr')
 		$myRows.slice(recordsShown, $myRows.length).each(function(){
 			$(this).hide().toggleClass('hidden');
-			$(e.target).text('View '+ paginationUnit +' next records').attr('data-action', 'expand');
+			$(e.target).text('View '+ paginationUnit +' more records').attr('data-action', 'expand');
 		})
 	}
 

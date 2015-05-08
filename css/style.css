@@ -69,6 +69,10 @@ body{
     padding:6px 6px;
 }
 
+.th-small{
+    width: 110px;
+}
+
 .js-more{
     text-decoration: none;
     display: inline-block;
