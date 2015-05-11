@@ -76,6 +76,7 @@ body{
     background-color: #fff;
     border-bottom: 1px solid #f0f0f0;
     padding:6px 6px;
+    word-wrap: break-word;
 }
 
 .th-small{
