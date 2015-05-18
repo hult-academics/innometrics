@@ -112,7 +112,10 @@ generateVistedPages = function(channel,ev, days){
 
 var cleanURL = function(myURL){
 
-	myURL = myURL.substr(2, myURL.length);
+	//remove url parameters
+	myURL = myURL.split("?")[0];
+
+	myURL = myURL.toString().substr(2, myURL.length);
 
 	return myURL
 }
@@ -209,10 +212,10 @@ var setChartTimeUnit = function(sessionTimes){
 			sessionTimes[i] = (Math.round(sessionTimes[i]/60*100)/100); //maybe calculate seconds instead of rounding
 		}
 
-		$('.chartFrame').prepend('<span class="timeUnit">'+ timeUnitLegend.minutes +'</span>');
+		$('.chartFrame').prepend('<span class="yUnit">'+ timeUnitLegend.minutes +'</span>');
 	}else{
 		//display chart in seconds
-		$('.chartFrame').prepend('<span class="timeUnit">'+ timeUnitLegend.seconds +'</span>');
+		$('.chartFrame').prepend('<span class="yUnit">'+ timeUnitLegend.seconds +'</span>');
 	}
 
 	return sessionTimes

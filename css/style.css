@@ -19,6 +19,8 @@ body{
 
 .chartFrame{
     max-width: 1370px;
+    position:relative;
+    padding-bottom:20px;
 }
 
 .data-controls{
@@ -118,6 +120,12 @@ body{
 
 }
 
-.timeUnit{
+.yUnit, .xUnit{
     font-size: 10px;
+}
+
+.xUnit{
+    position: absolute;
+    right:0;
+    bottom:0;
 }

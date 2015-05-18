@@ -7,12 +7,12 @@
 </head>
 <body>
 
-  <h2 class="catTitle">Engagement</h2>
 
   <section id="chart-wrapper" class="contentBlock whiteBlock">
     <h3 class="secTitle ta-c">Time on Hult.edu (last <span class="js-scope">30</span> days)</h3>
     <div class="chartFrame">
       <canvas id="timeonvisit" width="1370" height="300"></canvas>
+      <div class="xUnit">Date (mm/dd)</div>
     </div>
   </section>
 
@@ -23,9 +23,9 @@
         Refresh profile
       </button>
 
-      <button id="showall" class="btn">
+      <!--<button id="showall" class="btn">
         Show all data
-      </button>
+      </button>-->
     </div>
 
     <div class="contentBlock">
@@ -34,7 +34,7 @@
         <thead>
         <tr>
           <th class="tg-pi53 th-small">Visit Count</th>
-          <th class="tg-pi53 th-small">Last visit date</th>
+          <th class="tg-pi53 th-small">Last visit date (mm/dd/yyy)</th>
           <!--<th class="tg-pi53">Channel</th>-->
           <th class="tg-pi53">Content</th>
           <th class="tg-3sk9">Detail</th>
@@ -49,13 +49,13 @@
 
 
     <div class="contentBlock">
-      <h3 class="secTitle">Recent engagement activity</h3>
+      <h3 class="secTitle">Recent interactions</h3>
       <table id="recent-engagement" class="tg customTable" cellpadding="0" cellspacing="0">
         <thead>
         <tr>
           <th class="tg-pi53 th-small">Channel</th>
           <th class="tg-pi53 th-small">Action</th>
-          <th class="tg-pi53 th-small">Date</th>
+          <th class="tg-pi53 th-small">Date (mm/dd/yyy)</th>
           <th class="tg-pi53">Content</th>
           <th class="tg-3sk9">Detail</th>
         </tr>
